@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="angular.js"></script>
+    <style>
+        .warp{
+            margin: 20px auto;
+        }
+        span{
+            padding: 10px;
+            border: 1px solid #666;
+            margin-left: 10px;
+        }
+        .bg{
+            background: red;
+            color: #fff;
+        }
+    </style>
+</head>
+<body ng-app="mo">
+    <div class="warp" ng-controller="page">
+        <span ng-click="pre()">上一页</span>
+        <span ng-repeat="(a,i) in arr1" ng-class={true:'bg',false:''}[i.bg]>{{i.num}}</span>
+        <span ng-click="next()">下一页</span>
+    </div>
+</body>
+<script>
+    var app = angular.module('mo',[]);
+    app.factory('pages',function ($rootScope) {
+        return{
+            sorter : function () {
+                $rootScope.times = 0;
+                $rootScope.arr1 = [];
+                num();
+                function qbg() {
+                    for(var i = 0; i<$rootScope.arr1.length; i++){
+                        $rootScope.arr1[i].bg = false;
+                    }
+                }
+                function num() {
+                    $rootScope.arr1 = [];
+                    $rootScope.arr1.push(arr.slice(0)[0]);
+                    $rootScope.times>=4?$rootScope.arr1.push({num:'...',bg:false}):'';
+                    if($rootScope.times<4){
+                        for(var i=1; i<5; i++){
+                            $rootScope.arr1.push(arr[i]);
+                        }
+                        $rootScope.arr1.push({num:'...',bg:false});
+                        $rootScope.arr1.push(arr.slice(-1)[0]);
+                        qbg();
+                        $rootScope.arr1[$rootScope.times].bg = 'true';
+                    }else if($rootScope.times>=4 && $rootScope.times<arr.length-4){
+                        for(var i=$rootScope.times-2; i<($rootScope.times+3); i++){
+                            $rootScope.arr1.push(arr[i]);
+                        }
+                        $rootScope.arr1.push({num:'...',bg:false});
+                        $rootScope.arr1.push(arr.slice(-1)[0]);
+                        qbg();
+                        $rootScope.arr1[4].bg = 'true';
+                    }else if($rootScope.times>=arr.length-4 && $rootScope.times<arr.length){
+                        for(var i=arr.length-4; i<arr.length; i++){
+                            $rootScope.arr1.push(arr[i]);
+                        }
+                        qbg();
+                        $rootScope.arr1[$rootScope.times-(arr.length-6)].bg = 'true';
+                    }
+                };
+                $rootScope.pre = function (times) {
+                    if($rootScope.times<=0){
+                        $rootScope.times=arr.length-1
+                    }else {
+                        $rootScope.times--;
+                    }
+                    num();
+                };
+                $rootScope.next = function (times) {
+                    if($rootScope.times>=arr.length-1){
+                        $rootScope.times = 0;
+                    }else {
+                        ++$rootScope.times;
+                    };
+                    num()
+                }
+            }
+        }
+    });
+    app.controller('page',function (pages,$scope) {
+        pages.sorter();
+    });
+    var arr = [
+        {num:1,bg:false},
+        {num:2,bg:false},
+        {num:3,bg:false},
+        {num:4,bg:false},
+        {num:5,bg:false},
+        {num:6,bg:false},
+        {num:7,bg:false},
+        {num:8,bg:false},
+        {num:9,bg:false},
+        {num:10,bg:false},
+        {num:11,bg:false},
+        {num:12,bg:false},
+        {num:13,bg:false},
+        {num:14,bg:false},
+        {num:15,bg:false},
+        {num:16,bg:false},
+        {num:17,bg:false},
+        {num:18,bg:false},
+        {num:19,bg:false},
+        {num:20,bg:false},
+        {num:21,bg:false},
+        {num:22,bg:false},
+        {num:23,bg:false},
+        {num:24,bg:false},
+        {num:25,bg:false}
+    ];
+</script>
+</html>
